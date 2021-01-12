@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { coloring, commands } from "@/variables";
+
 export default {
   name: "Editor",
   data() {
@@ -20,23 +22,17 @@ export default {
       currentLineCount: 0,
       lines: [],
       selectionEnd: 0,
-      editable: false,
-      commands: ["BCK", "LAI", "LAM", "STA", "LAP", "LBI", "LBM", "OTA", "ADD", "SUB", "CMP", "JMP", "JMZ", "JMC", "SAP", "HALT", "DB"] // DB a, b write b to address a
+      editable: false
     }
   },
   methods: {
-    countLines(e) {
-      this.currentLine(e);
-      this.lineCount();
-    },
     currentLine(e) {
       this.currentLineNum = e.target.value.substr(0, e.target.selectionStart).split("\n").length;
       this.selectionEnd = e.target.value.substr(0, e.target.selectionEnd).split("\n").length;
-      console.log(this.lines);
     },
     lineCount() {
       let lineCount = this.content.length ? this.content.split(/\r\n|\r|\n/).length : 1;
-      //if(lineCount > this.currentLineCount) this.lines.splice(this.currentLineNum - 1, 0, this.content.split(/\r\n|\r|\n/)[this.currentLineNum - 1]);
+
       if(lineCount > this.currentLineCount) this.partitionDocument();
       else if(lineCount < this.currentLineCount){
         this.partitionDocument();
@@ -44,23 +40,13 @@ export default {
       else this.lines[this.currentLineNum - 1] = this.content.split(/\r\n|\r|\n/)[this.currentLineNum - 1];
 
       this.currentLineCount = lineCount;
-      console.log(this.lines);
     },
-    partitionDocument(){
+    partitionDocument() {
       this.lines = this.content.split(/\r\n|\r|\n/);
     },
-    colorLine(text){
-      //text = text.replace(/(["'])(?:(?=(\\?))\2.)*?\1/, "<span style='color: red'>$&</span>");
-
-      text = text.replace("#define", "<span style='color: blue'>#define</span>");
-      text = text.replace(/0[xX][0-9a-fA-F]+/, "<span style='color: yellow'>$&</span>");
-      text = text.replace(/^\.\w+[a-zA-Z0-9_]:/, "<span style='color: green'>$&</span>");
-
-      this.commands.forEach(command => {
-        text = text.replace(new RegExp(command, "gi"), `<span style='color: #d7b150'>$&</span>`);
-      });
-      text = text.replace(/;.*$/, "<span style='color: gray'>$&</span>");
-
+    colorLine(text) {
+      coloring.forEach(coloring => { text = text.replace(coloring.value, "<span style='color: " + coloring.color + "'>" + coloring.replace + "</span>"); });
+      commands.forEach(command => { text = text.replace(new RegExp(command, "gi"), `<span style='color: #d7b150'>$&</span>`); });
       return text;
     }
   }
@@ -70,9 +56,11 @@ export default {
 <style lang="scss" scoped>
 .editor {
   height: 100vh;
-  span{
+
+  span {
     height: 5%;
   }
+
   .stack {
     #editor {
       font-family: Roboto,serif;
@@ -93,15 +81,15 @@ export default {
       tab-size: 4;
 
     }
-    .display{
+    .display {
       position: relative;
       width: 100%;
       height: 95%;
       pointer-events: none;
       background: transparent;
 
-      .line{
-        font-family: Roboto,serif;
+      .line {
+        font-family: Roboto, serif;
         letter-spacing: normal;
         padding: 0;
         margin: 0;
@@ -110,7 +98,6 @@ export default {
         pointer-events: none;
       }
     }
-
   }
 }
 </style>

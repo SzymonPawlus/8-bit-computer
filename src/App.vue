@@ -15,6 +15,4 @@
     color: white;
     overflow: hidden;
   }
-
-
 </style>
