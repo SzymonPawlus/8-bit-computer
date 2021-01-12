@@ -1,10 +1,10 @@
 <template>
-  <div class="editor">
+  <div class="main">
     <span>{{ currentLineNum }} / {{ currentLineCount }}</span>
     <div class="stack">
-      <textarea @click="currentLine" @keyup="currentLine" @input="lineCount" @change="currentLine" id="editor" v-model="content" spellcheck="false"/>
-      <div class="display" >
-        <div class="line" v-for="(line, index) in lines" :key="index" v-html="colorLine(line)"></div>
+      <textarea @click="currentLine" @keyup="currentLine" @input="lineCount" @change="currentLine" id="area" v-model="content" spellcheck="false" onscroll="display.scrollTo(0, this.scrollTop)"/>
+      <div class="display" id="display">
+        <div class="line" v-for="(line, index) in lines" :key="index" v-html="colorLine(line)" ></div>
       </div>
     </div>
   </div>
@@ -22,7 +22,8 @@ export default {
       currentLineCount: 0,
       lines: [],
       selectionEnd: 0,
-      editable: false
+      editable: false,
+      commands: ["BCK", "LAI", "LAM", "STA", "LAP", "LBI", "LBM", "OTA", "ADD", "SUB", "CMP", "JMP", "JMZ", "JMC", "SAP", "HALT", "DB"] // DB a, b write b to address a
     }
   },
   methods: {
@@ -54,7 +55,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.editor {
+.main {
   height: 100vh;
 
   span {
@@ -62,7 +63,7 @@ export default {
   }
 
   .stack {
-    #editor {
+    #area {
       font-family: Roboto,serif;
       position: absolute;
       width: 100%;
@@ -79,17 +80,20 @@ export default {
       padding: 0;
       margin: 1px 0 0 0;
       tab-size: 4;
+      overflow-y: scroll;
 
     }
-    .display {
-      position: relative;
+    .display{
+      position: fixed;
       width: 100%;
       height: 95%;
       pointer-events: none;
       background: transparent;
+      overflow-y: hidden;
 
-      .line {
-        font-family: Roboto, serif;
+      .line{
+        position: relative;
+        font-family: Roboto,serif;
         letter-spacing: normal;
         padding: 0;
         margin: 0;
@@ -98,6 +102,7 @@ export default {
         pointer-events: none;
       }
     }
+
   }
 }
 </style>
