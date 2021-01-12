@@ -8,10 +8,8 @@
 import Editor from "@/components/Editor";
 export default {
   name: "Home",
-  components: {Editor}
+  components: {
+    Editor
+  }
 }
 </script>
-
-<style scoped>
-
-</style>
