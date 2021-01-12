@@ -13,5 +13,8 @@
   body {
     background-color: black;
     color: white;
+    overflow: hidden;
   }
+
+
 </style>
