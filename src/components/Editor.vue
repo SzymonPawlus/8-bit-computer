@@ -2,7 +2,7 @@
   <div class="editor">
     <span>{{ currentLineNum }} / {{ currentLineCount }}</span>
     <div class="stack">
-      <textarea @click="currentLine" @keyup="currentLine" @input="lineCount" @change="currentLine" id="editor" v-model="content" spellcheck="fals"/>
+      <textarea @click="currentLine" @keyup="currentLine" @input="lineCount" @change="currentLine" id="editor" v-model="content" spellcheck="false"/>
       <div class="display" >
         <div class="line" v-for="(line, index) in lines" :key="index" v-html="colorLine(line)"></div>
       </div>
@@ -20,7 +20,8 @@ export default {
       currentLineCount: 0,
       lines: [],
       selectionEnd: 0,
-      editable: false
+      editable: false,
+      commands: ["BCK", "LAI", "LAM", "STA", "LAP", "LBI", "LBM", "OTA", "ADD", "SUB", "CMP", "JMP", "JMZ", "JMC", "SAP", "HALT", "DB"] // DB a, b write b to address a
     }
   },
   methods: {
@@ -49,10 +50,15 @@ export default {
       this.lines = this.content.split(/\r\n|\r|\n/);
     },
     colorLine(text){
-      text = text.replace(/(["'])(?:(?=(\\?))\2.)*?\1/, "<span style='color: red'>$&</span>");
+      //text = text.replace(/(["'])(?:(?=(\\?))\2.)*?\1/, "<span style='color: red'>$&</span>");
+
       text = text.replace("#define", "<span style='color: blue'>#define</span>");
       text = text.replace(/0[xX][0-9a-fA-F]+/, "<span style='color: yellow'>$&</span>");
       text = text.replace(/^\.\w+[a-zA-Z0-9_]:/, "<span style='color: green'>$&</span>");
+
+      this.commands.forEach(command => {
+        text = text.replace(new RegExp(command, "gi"), `<span style='color: #d7b150'>$&</span>`);
+      });
       text = text.replace(/;.*$/, "<span style='color: gray'>$&</span>");
 
       return text;
@@ -76,10 +82,10 @@ export default {
       background-color: #101010;
       outline: none;
       border: none;
-      font-size: 16px;
+      font-size: 25px;
       color: rgba(0, 0, 0, 0);
       caret-color: red;
-      line-height: 16px;
+      line-height: 25px;
       pointer-events: auto;
       letter-spacing: normal;
       padding: 0;
@@ -99,8 +105,8 @@ export default {
         letter-spacing: normal;
         padding: 0;
         margin: 0;
-        font-size: 16px;
-        height: 16px;
+        font-size: 25px;
+        height: 25px;
         pointer-events: none;
       }
     }
