@@ -20,7 +20,8 @@ async function createWindow() {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      enableRemoteModule: true
     }
   })
 
@@ -34,33 +35,44 @@ async function createWindow() {
     win.loadURL('app://./index.html')
   }
   Menu.setApplicationMenu(
-      Menu.buildFromTemplate([{
-        label: 'File',
-        submenu: [
+      Menu.buildFromTemplate([
           {
-            label: 'New File',
-            accelerator: "Ctrl+N",
-            click: () => win.webContents.send("new")
-          },
-          {
-            label: 'Open File',
-            accelerator: "Ctrl+O",
-            click: () => win.webContents.send("open")
-          },
-          {
-            label: 'Save File',
-            accelerator: "Ctrl+S",
-            click: () => win.webContents.send("save")
-          },{
-            label: 'Save File as',
-            accelerator: "Ctrl+Shift+S",
-            click: () => win.webContents.send("saveAs")
-          }
-        ]
-      }])
-  )
-
-
+            label: 'File',
+            submenu: [
+              {
+                label: 'New File',
+                accelerator: "Ctrl+N",
+                click: () => win.webContents.send("new")
+              },
+              {
+                label: 'Open File',
+                accelerator: "Ctrl+O",
+                click: () => win.webContents.send("open")
+              },
+              {
+                label: 'Save File',
+                accelerator: "Ctrl+S",
+                click: () => win.webContents.send("save")
+              },
+              {
+                label: 'Save File as',
+                accelerator: "Ctrl+Shift+S",
+                click: () => win.webContents.send("saveAs")
+              }
+            ]
+        },
+        {
+          label: 'Compilator',
+          submenu: [
+            {
+              label: 'Compile app',
+              accelerator: "Ctrl+Q",
+              click: () => win.webContents.send("compile")
+            }
+          ]
+        }
+      ])
+  );
 }
 
 // Quit when all windows are closed.
@@ -91,7 +103,6 @@ app.on('ready', async () => {
     }
   }
   createWindow()
-
 })
 
 // Exit cleanly on request from parent process in development mode.

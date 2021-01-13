@@ -1,0 +1,43 @@
+#define a 0xbe
+#define b 0xbf
+#define gr 0xc0
+#define sm 0xc1
+#define sum 0xc2
+#define i 0xc3
+
+LAM b
+LBM a
+CMP
+JMC firstset
+JMP secondset
+.firstset:
+STA gr
+LAM a
+STA sm
+JMP setup
+.secondset:
+STA sm
+LAM a
+STA gr
+.setup:
+LAI 0
+STA sum
+LAM sm
+STA i
+.loop:
+LAM sum
+LBM gr
+ADD
+STA sum
+LAM i
+LBI 1
+SUB
+STA i
+JMZ end
+JMP loop
+.end:
+LAM sum
+OTA
+HALT
+DB a 0x02
+DB b 0x64
