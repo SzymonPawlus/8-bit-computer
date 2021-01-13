@@ -2,6 +2,8 @@ import sys
 import re
 import math
 
+sys.tracebacklimit = 0
+
 machineCode = [0x00] * 192
 
 commandsOne = ["BCK", "OTA", "ADD", "SUB", "CMP", "HALT"]
@@ -90,7 +92,9 @@ def wrtieByteArrayToFile(array, file):
 
 
 # open file
-print(sys.argv[1])
+if len(sys.argv) < 3:
+    raise ValueError("Too few parameters")
+
 f = open(sys.argv[1], "r")
 code = f.read()
 f.close()
@@ -175,14 +179,13 @@ for line in lines:
         x += 1
 
 # write to binary file
-binFile = open("program.bin", "wb")
+binFile = open(str(sys.argv[2]) +".bin", "wb")
 binFile.write(bytes(machineCode))
 binFile.close()
 
 # write to txt file
-txtFile = open("program.txt", "w")
+txtFile = open(str(sys.argv[2]) + ".txt", "w")
 wrtieByteArrayToFile(machineCode, txtFile)
 txtFile.close()
 
-print(lines, labels)
-printByteArray(machineCode)
+print()
