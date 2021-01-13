@@ -24,7 +24,7 @@ export default class fileHandler{
             });
             return file;
         }else{
-            await this.saveFileAs(data);
+            return await this.saveFileAs(data);
         }
     }
 
