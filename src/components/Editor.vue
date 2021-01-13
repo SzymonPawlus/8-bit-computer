@@ -129,7 +129,7 @@ export default {
       #editor {
         position: absolute;
         width: 100%;
-        height: calc(100% - 30px);
+        height: calc(100% - 90px);
         background-color: #101010;
         outline: none;
         border: none;
@@ -148,7 +148,7 @@ export default {
       .display {
         position: fixed;
         width: 100%;
-        height: 95%;
+        height: calc(100% - 90px);
         pointer-events: none;
         background: transparent;
         overflow-y: hidden;

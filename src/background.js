@@ -5,37 +5,64 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const path = require('path')
-
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
-async function createWindow() {
-  // Create the browser window.
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+async function createModalWindow(devPath, prodPath, parent){
+  let win = new BrowserWindow({
+    width: 500,
+    height: 800,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js'),
-      enableRemoteModule: true
-    }
+      enableRemoteModule: true,
+    },
+    parent: parent,
+    modal: true
   })
+    win.setMenuBarVisibility(false);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + devPath)
     if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol('app')
     // Load the index.html when not in development
-    win.loadURL('app://./index.html')
+    win.loadURL(`app://./${prodPath}`)
   }
-  Menu.setApplicationMenu(
-      Menu.buildFromTemplate([
+}
+
+async function createWindow(devPath, prodPath) {
+  // Create the browser window.
+  let win = new BrowserWindow({
+    width: 1330,
+    height: 900,
+    webPreferences: {
+      // Use pluginOptions.nodeIntegration, leave this alone
+      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
+      nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js'),
+      enableRemoteModule: true,
+    },
+  })
+
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    // Load the url of the dev server if in development mode
+    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + devPath)
+    console.log(process.env.WEBPACK_DEV_SERVER_URL)
+    if (!process.env.IS_TEST) win.webContents.openDevTools()
+  } else {
+    createProtocol('app')
+    // Load the index.html when not in development
+    win.loadURL(`app://./${prodPath}`)
+  }
+    Menu.setApplicationMenu(
+        Menu.buildFromTemplate([
           {
             label: 'File',
             submenu: [
@@ -60,19 +87,25 @@ async function createWindow() {
                 click: () => win.webContents.send("saveAs")
               }
             ]
-        },
-        {
-          label: 'Compilator',
-          submenu: [
-            {
-              label: 'Compile app',
-              accelerator: "Ctrl+Q",
-              click: () => win.webContents.send("compile")
-            }
-          ]
-        }
-      ])
-  );
+          },
+          {
+            label: 'Compiler',
+            submenu: [
+              {
+                label: 'Compile app',
+                accelerator: "Ctrl+Q",
+                click: () => win.webContents.send("compile")
+              },
+              {
+                label: "Compiler settings",
+                accelerator: "Ctrl+S",
+                click: () => {modal = createModalWindow("settings", "settings.html", win)}
+              }
+            ]
+          }
+        ])
+    );
+  return win
 }
 
 // Quit when all windows are closed.
@@ -102,7 +135,10 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
-  createWindow()
+  if (!process.env.WEBPACK_DEV_SERVER_URL) {
+    createProtocol('app')
+  }
+  createWindow("", "index.html", true, false);
 })
 
 // Exit cleanly on request from parent process in development mode.

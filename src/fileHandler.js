@@ -1,7 +1,8 @@
 const dialog = window.require('electron').remote.dialog;
 const { remote } = window.require('electron');
 const fs = window.require('fs');
-const { PythonShell } = window.require("python-shell")
+const { PythonShell } = window.require("python-shell");
+let settings = window.require("electron-settings");
 
 export default class fileHandler {
     static async saveFileAs(data) {
@@ -36,10 +37,17 @@ export default class fileHandler {
             mode: 'text',
             args: [file, "./src/output/code"],
         };
-        PythonShell.run("./src/python/compiler.py", options, function (err, results){
+        let compiler = await settings.get('settings.compilerPath');
+        PythonShell.run(compiler, options, function (err, results){
             if(err) console.log(err);
             console.log(results);
         })
         return file_;
+    }
+
+    static async getPathToChosenFile(){
+        let filename = await dialog.showOpenDialog(remote.getCurrentWindow());
+        if(filename.canceled) return "";
+        return filename.filePaths[0];
     }
 }
