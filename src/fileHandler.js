@@ -20,7 +20,6 @@ export default class fileHandler {
         fs.writeFile(file, data, (err) => {
             if (err) throw err;
         });
-        return file;
     }
 
     static async openFile() {
@@ -31,18 +30,47 @@ export default class fileHandler {
         return [text.toString(), file];
     }
 
-    static async compileScript(data, file) {
-        let file_ = await this.saveFile(data, file);
+    static async compileScript(data, file, errHandler) {
+        await this.saveFile(data, file);
         let options = {
             mode: 'text',
+            pythonOptions: ['-u'],
             args: [file, "./src/output/code"],
         };
         let compiler = await settings.get('settings.compilerPath');
-        PythonShell.run(compiler, options, function (err, results){
-            if(err) console.log(err);
-            console.log(results);
+        await PythonShell.run(compiler, options, function (err, results){
+            console.log(results.toString()  + "\n" + err ? err : "")
+            errHandler(results.toString()  + "\n" + err ? err : "");
         })
-        return file_;
+    }
+
+    static async openEmulator(data, file, errHandler){
+        await this.compileScript(data, file, errHandler);
+        let emulator = await settings.get("settings.emulatorPath");
+        let options = {
+            mode: 'text',
+            pythonOptions: ['-u'],
+            args: ["./src/output/code.bin"],
+        };
+        await PythonShell.run(emulator, options, (err, results) => {
+            console.log(results.toString()  + "\n" + err ? err : "")
+            errHandler(results.toString()  + "\n" + err ? err : "");
+        })
+    }
+
+    static async programMemory(data, file, errHandler){
+        await this.compileScript(data, file, errHandler);
+        let programmer = await settings.get("settings.programmerPath");
+        let port = await settings.get("settings.port")
+        let options = {
+            mode: 'text',
+            pythonOptions: ['-u'],
+            args: ["./src/output/code.bin", port],
+        };
+        await PythonShell.run(programmer, options, (err, results) => {
+            console.log(results.toString() + "\n" + err ? err : "")
+            errHandler(results.toString()  + "\n" + err ? err : "");
+        })
     }
 
     static async getPathToChosenFile(){

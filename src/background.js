@@ -22,7 +22,6 @@ async function createModalWindow(devPath, prodPath, parent){
       enableRemoteModule: true,
     },
     parent: parent,
-    modal: true
   })
     win.setMenuBarVisibility(false);
 
@@ -97,10 +96,21 @@ async function createWindow(devPath, prodPath) {
                 click: () => win.webContents.send("compile")
               },
               {
+                label: 'Run Emulator',
+                accelerator: "Ctrl+E",
+                click: () => win.webContents.send("emulate")
+              },
+              {
+                label: 'Run Programmer',
+                accelerator: "Ctrl+P",
+                click: () => win.webContents.send("program")
+              },
+              {
                 label: "Compiler settings",
-                accelerator: "Ctrl+S",
-                click: () => {modal = createModalWindow("settings", "settings.html", win)}
-              }
+                accelerator: "Ctrl+Alt+S",
+                click: () => {createModalWindow("settings", "settings.html", win)}
+              },
+
             ]
           }
         ])

@@ -7,7 +7,27 @@
         <button class="value-change" @click="setCompilerPath">...</button>
       </div>
     </div>
-    <div class="option">
+   <div class="option">
+     <div class="option-label">Emulator Location</div>
+     <div class="option-value">
+       <div class="value-display">{{ set.emulatorPath }}</div>
+       <button class="value-change" @click="setEmulatorPath">...</button>
+     </div>
+   </div>
+   <div class="option">
+     <div class="option-label">Programmer Location</div>
+     <div class="option-value">
+       <div class="value-display">{{ set.programmerPath }}</div>
+       <button class="value-change" @click="setProgrammerPath">...</button>
+     </div>
+   </div>
+   <div class="option">
+     <div class="option-label">Serial Port</div>
+     <div class="option-value">
+       <input type="text" placeholder="Enter serial port here..." v-model="set.port"/>
+     </div>
+   </div>
+   <div class="option">
      <div class="option-label">Line Counting</div>
      <div class="option-value">
         <select v-model="set.lineCount">
@@ -31,6 +51,9 @@ name: "Settings",
     return{
       set: {
         compilerPath: "",
+        emulatorPath: "",
+        programmerPath: "",
+        port: "",
         lineCount: "n"
       }
     }
@@ -40,6 +63,12 @@ name: "Settings",
       this.set.compilerPath = await fileHandler.getPathToChosenFile();
     },
 
+    async setEmulatorPath() {
+      this.set.emulatorPath = await fileHandler.getPathToChosenFile();
+    },
+    async setProgrammerPath() {
+      this.set.programmerPath = await fileHandler.getPathToChosenFile();
+    },
     async saveSettings() {
       await settings.set('settings', this.set);
     },
@@ -95,6 +124,15 @@ name: "Settings",
         }
 
         select{
+          width: 100%;
+          outline: none;
+          border: none;
+          background: #404040;
+          font-size: 1.2rem;
+          color: white;
+        }
+
+        input{
           width: 100%;
           outline: none;
           border: none;

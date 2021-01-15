@@ -13,6 +13,9 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/vue-fontawesome": "^2.0.2",
     "child_process": "^1.0.2",
     "core-js": "^3.6.5",
     "electron-settings": "^4.0.2",
