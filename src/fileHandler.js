@@ -1,7 +1,7 @@
 const dialog = window.require('electron').remote.dialog;
 const { remote } = window.require('electron');
 const fs = window.require('fs');
-const { PythonShell } = window.require("python-shell");
+const { PythonShell } = window.require("python-shell")
 let settings = window.require("electron-settings");
 
 export default class fileHandler {
@@ -44,7 +44,7 @@ export default class fileHandler {
         })
     }
 
-    static async openEmulator(data, file, errHandler){
+    static async openEmulator(data, file, errHandler) {
         await this.compileScript(data, file, errHandler);
         let emulator = await settings.get("settings.emulatorPath");
         let options = {
@@ -58,7 +58,7 @@ export default class fileHandler {
         })
     }
 
-    static async programMemory(data, file, errHandler){
+    static async programMemory(data, file, errHandler) {
         await this.compileScript(data, file, errHandler);
         let programmer = await settings.get("settings.programmerPath");
         let port = await settings.get("settings.port")
@@ -73,7 +73,7 @@ export default class fileHandler {
         })
     }
 
-    static async getPathToChosenFile(){
+    static async getPathToChosenFile() {
         let filename = await dialog.showOpenDialog(remote.getCurrentWindow());
         if(filename.canceled) return "";
         return filename.filePaths[0];

@@ -111,39 +111,31 @@ export default {
     getFileName(txt) {
       return path.basename(txt);
     },
-    println(data){
+    println(data) {
       this.terminal += data + "<br>";
     },
     async compile() {
-      await fileHandler.compileScript(this.content, this.currentPath, (msg) => {
-        if (msg) {
-          this.println(msg)
-        } else {
-          this.println("<span style='color: green'>Compiled!</span>")
-        }
+      await fileHandler.compileScript(this.content, this.currentPath, msg => {
+        if(msg) this.println(msg)
+        else this.println("<span style='color: green'>Compiled!</span>")
       });
+
       this.saved = true;
     },
-
-    async emulate(){
-      console.log(await fileHandler.openEmulator(this.content, this.currentPath, (msg) => {
-        if(msg){
-          this.println(msg)
-        }else{
-          this.println("Emulator on!")
-        }
+    async emulate() {
+      console.log(await fileHandler.openEmulator(this.content, this.currentPath, msg => {
+        if(msg) this.println(msg)
+        else this.println("Emulator on!")
       }));
+
       this.saved = true;
     },
-
-    async program(){
-      console.log(await fileHandler.programMemory(this.content, this.currentPath, (msg) => {
-        if(msg){
-          this.println(msg)
-        }else{
-          this.println("<span style='color: greenyellow'>Programed!</span>")
-        }
+    async program() {
+      console.log(await fileHandler.programMemory(this.content, this.currentPath, msg => {
+        if(msg) this.println(msg)
+        else this.println("<span style='color: greenyellow'>Programed!</span>")
       }));
+
       this.saved = true;
     }
   }
@@ -175,11 +167,11 @@ export default {
         margin: auto 0;
       }
 
-      .separator{
+      .separator {
         flex: 1;
       }
 
-      .setting{
+      .setting {
         outline: none;
         border: none;
         margin: 0 10px;
@@ -187,6 +179,7 @@ export default {
         background: #202020;
         color: white;
         cursor: pointer;
+        font-family: "Roboto", sans-serif;
       }
     }
 
@@ -242,7 +235,7 @@ export default {
       }
     }
 
-    .terminal{
+    .terminal {
       position: absolute;
       width: calc(100% - 60px);
       height: 20%;
@@ -251,20 +244,22 @@ export default {
       padding: 0 30px;
       background: #202020;
 
-      .top-bar{
+      .top-bar {
         height: 40px;
         width: 100vw;
         margin: 0 -30px;
         background: black;
         border: #101010 2px solid;
 
-        .label{
-          margin: auto 20px;
+        .label {
+          font-family: "Roboto", sans-serif;
+          font-weight: bold;
+          margin: 3px 20px;
           padding: 10px;
         }
       }
 
-      .terminal-field{
+      .terminal-field {
         height: auto;
         overflow-y: scroll;
         padding: 10px 0;

@@ -47,8 +47,8 @@ let settings = window.require("electron-settings");
 
 export default {
 name: "Settings",
-  data(){
-    return{
+  data() {
+    return {
       set: {
         compilerPath: "",
         emulatorPath: "",
@@ -59,23 +59,11 @@ name: "Settings",
     }
   },
   methods: {
-    async setCompilerPath() {
-      this.set.compilerPath = await fileHandler.getPathToChosenFile();
-    },
-
-    async setEmulatorPath() {
-      this.set.emulatorPath = await fileHandler.getPathToChosenFile();
-    },
-    async setProgrammerPath() {
-      this.set.programmerPath = await fileHandler.getPathToChosenFile();
-    },
-    async saveSettings() {
-      await settings.set('settings', this.set);
-    },
-
-    async getSettings() {
-      this.set = await settings.get('settings');
-    }
+    async setCompilerPath() { this.set.compilerPath = await fileHandler.getPathToChosenFile(); },
+    async setEmulatorPath() { this.set.emulatorPath = await fileHandler.getPathToChosenFile(); },
+    async setProgrammerPath() { this.set.programmerPath = await fileHandler.getPathToChosenFile(); },
+    async saveSettings() { await settings.set('settings', this.set); },
+    async getSettings() { this.set = await settings.get('settings'); }
   },
   mounted() {
     this.getSettings();
@@ -84,22 +72,23 @@ name: "Settings",
 </script>
 
 <style lang="scss" scoped>
-  .settings{
+  .settings {
     padding: 20px;
     display: flex;
     flex-direction: column;
 
-    .option{
+    .option {
       width: 460px;
       margin: 20px auto;
 
-      .option-label{
+      .option-label {
         font-size: 1.5rem;
         color: white;
         margin-bottom: 10px;
+        font-family: "Roboto", sans-serif;
       }
 
-      .option-value{
+      .option-value {
         width: 454px;
         height: 30px;
         padding: 3px;
@@ -111,39 +100,48 @@ name: "Settings",
         font-size: 1.2rem;
         color: white;
         overflow: hidden;
-        .value-display{
+
+        .value-display {
           width: 460px;
           margin: auto;
 
         }
 
-        .value-change{
+        .value-change {
           height: 30px;
           width: 30px;
           padding: 3px;
         }
 
-        select{
+        select {
           width: 100%;
           outline: none;
           border: none;
           background: #404040;
           font-size: 1.2rem;
           color: white;
+          font-family: "Roboto", sans-serif;
+          padding-left: 10px;
         }
 
-        input{
+        option {
+          font-family: "Roboto", sans-serif;
+        }
+
+        input {
           width: 100%;
           outline: none;
           border: none;
           background: #404040;
           font-size: 1.2rem;
           color: white;
+          font-family: "Roboto", sans-serif;
+          padding-left: 10px;
         }
       }
     }
 
-    .apply{
+    .apply {
       background: #0099ff;
       outline: none;
       border: #101010 1px solid;
@@ -152,6 +150,8 @@ name: "Settings",
       font-weight: bold;
       width: 460px;
       margin: 20px auto;
+      font-family: "Roboto", sans-serif;
+      font-size: 1.2rem;
     }
   }
 </style>
