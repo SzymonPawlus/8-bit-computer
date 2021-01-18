@@ -1,0 +1,129 @@
+#define swap 0xc0
+#define return 0xc1
+#define ymulti 0xc2
+#define fact 0xc3
+#define temp 0xc4
+#define back 0xc5
+#define result 0xc6
+#define b 0xc7
+#define a 0xc8
+#define c 0xc9
+#define i 0xca
+#define sum 0xcb
+#define bsp   0xf0 
+#define *sp   0xdf 
+#define stack 0xe0
+LSI bsp 
+LAI stack 
+STA *sp 
+LAI 0
+STA ymulti
+LAI 4
+JSR pusha
+JSR factorial
+LAM return
+STA fact
+LAM fact
+OTA
+.factorial:
+LAP *sp
+LBI 0
+CMP 
+JMZ if0code
+JMP if0end
+.if0code:
+LAI 1
+STA return
+JSR popa 
+RET 
+.if0end:
+LAP *sp
+LBI 0
+CMP 
+JMZ if1end
+JMP if1code
+.if1code:
+LAP *sp
+LBI 1
+SUB
+STA temp
+LAM temp
+JSR pusha
+JSR factorial
+LAM return
+STA back
+LAP *sp
+STA ymulti
+LAM back
+JSR pusha
+JSR multiply
+LAM return
+STA result
+LAM result
+STA return
+JSR popa 
+RET 
+.if1end:
+.multiply:
+LAM ymulti
+STA b
+LAP *sp
+STA a
+LAM b
+LBM a
+CMP 
+JMC if2end
+JMP if2code
+.if2code:
+LAI 0
+STA c
+LAM a
+STA c
+LAM b
+STA a
+LAM c
+STA b
+.if2end:
+LAM b
+STA i
+LAI 0
+STA sum
+.while0:
+LAM i
+LBI 0
+CMP 
+JMZ while0end
+JMP while0code
+.while0code:
+LAM sum
+LBM a
+ADD
+STA sum
+LAM i
+LBI 1
+SUB
+STA i
+JMP while0
+.while0end:
+LAM sum
+STA return
+JSR popa 
+RET 
+.pusha:
+PUA
+LAM *sp
+LBI 1
+ADD
+STA *sp
+POA
+SAP *sp
+RET
+.popa:
+LAP *sp
+PUA
+LAM *sp
+LBI 1
+SUB
+STA *sp
+POA
+RET

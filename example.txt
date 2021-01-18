@@ -1,0 +1,22 @@
+var a = 10;
+var b = 15;
+var c;
+if(b > a){
+    c = a;
+    a = b;
+    b = c;
+}
+
+var i = b;
+var sum;
+while(i != 0){
+    sum = sum + a;
+    i = i - 1;
+}
+out sum;
+sum = xy(sum);
+
+func xy(a){
+    var y = a;
+    return y;
+}
