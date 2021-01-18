@@ -1,5 +1,8 @@
 # 8-bit Assebmly
 
+# Compiler
+**TO DO**
+
 # Commands
 
 ## Basic Set (Physical and Emulator):
