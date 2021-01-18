@@ -35,7 +35,7 @@
 
 # Syntax
 
-- ### `#define` directive
+- ### `#define` directive:
 Syntax: 
 
 `#define (arg1) 0x(arg2)`
