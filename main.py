@@ -6,13 +6,15 @@ sys.tracebacklimit = 0
 
 machineCode = [0x00] * 192
 
-commandsOne = ["BCK", "OTA", "ADD", "SUB", "CMP", "HALT"]
-commandsTwo = ["LAI", "LAM", "STA", "LAP", "LBI", "LBM", "JMP", "JMZ", "JMC", "SAP"]
+commandsOne = ["BCK", "OTA", "ADD", "SUB", "CMP", "HALT", "PUA", "POA", "RET"]
+commandsTwo = ["LAI", "LAM", "STA", "LAP", "LBI", "LBM", "JMP", "JMZ", "JMC", "SAP", "JSR", "LSI", "LBP", "STB", "SBP"]
 
 commandsCode = {"BCK": 0x0, "LAI": 0x1, "LAM": 0x2, "STA": 0x3,
                 "LAP": 0x4, "LBI": 0x5, "LBM": 0x6, "OTA": 0x7,
                 "ADD": 0x8, "SUB": 0x9, "CMP": 0xa, "JMP": 0xb,
-                "JMZ": 0xc, "JMC": 0xd, "SAP": 0xe, "HALT": 0xf}
+                "JMZ": 0xc, "JMC": 0xd, "SAP": 0xe, "HALT": 0xf,
+                "PUA": 0x10, "POA": 0x11, "JSR": 0x12, "RET": 0x13,
+                "LSI": 0x14, "LBP": 0x15, "STB": 0x16, "SBP": 0x17}
 
 
 def lineDivide(code):
@@ -36,10 +38,10 @@ def syntaxCheck(line, num):
             if re.search(command, line[0], re.IGNORECASE):
                 return ""
         if length == 2:
-            if re.search(command, line[0], re.IGNORECASE) and re.search("^[a-zA-Z0-9_]*$", line[1]):
+            if re.search(command, line[0], re.IGNORECASE) and re.search("^[a-zA-Z0-9-*_]*$", line[1]):
                 return ""
     if length == 3:
-        if line[0] == "#define" and re.search("^[a-zA-Z0-9_]*$", line[1]) and re.search("0[xX][0-9a-fA-F]+", line[2]):
+        if line[0] == "#define" and re.search("^[a-zA-Z0-9-*_]*$", line[1]) and re.search("0[xX][0-9a-fA-F]+", line[2]):
             return ""
         if re.search("DB", line[0], re.IGNORECASE) and re.search("^[a-zA-Z0-9_]*$", line[1]) and re.search(
                 "^[a-zA-Z0-9_]*$", line[2]):
@@ -91,10 +93,11 @@ def wrtieByteArrayToFile(array, file):
         return
 
 
-# open file
+# args check
 if len(sys.argv) < 3:
     raise ValueError("Too few parameters")
 
+# open file
 f = open(sys.argv[1], "r")
 code = f.read()
 f.close()
@@ -129,7 +132,7 @@ for line in lines:
     else:
         label = getLabel(line, programBytes)
         if label[0] in labels:
-            print("Repeated label at line " + str(x))
+            raise ValueError("Repeated label at line " + str(x))
         elif label[0] is not None:
             labels[label[0]] = label[1]
     x += 1

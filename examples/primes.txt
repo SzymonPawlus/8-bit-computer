@@ -1,0 +1,99 @@
+#define primes_pointer 0xc0
+#define mods_pointer    0xc1
+#define primes         0xc2
+#define primes_left    0xc3
+#define is_prime       0xc4
+#define current_number 0xc5
+#define swap           0xc6
+#define primes_arr     0xd0
+#define mods_arr       0xe0
+
+.setup:
+LAI 2
+STA current_number ; begin with value 2
+
+LAI 0
+STA primes ; setup primes amount
+STA primes_left ; setup primes amout left
+
+.next_prime:
+LAI primes_arr
+STA primes_pointer ; set pointer to primes array
+
+LAI mods_arr
+STA mods_pointer ; set pointer to mods array
+
+LAI 1
+STA is_prime ; assume that current number is prime
+
+LAM primes
+STA primes_left ; set primes left to primes
+
+.prime_loop:
+LAM primes_left
+LBI 0
+CMP ; check if primes_left is zero 
+JMZ check ; if so go out of loop
+LAP primes_pointer
+STA swap
+LAP mods_pointer
+LBM swap ; get prime and mod by pointer
+CMP ; compare if modulo is equal to prime
+JMZ notprime; If not prime
+JMP setupNext
+.notprime:
+LAI 0
+STA is_prime ; Specify it's not prime
+SAP mods_pointer ; set modulo to 0
+.setupNext:
+LBI 1
+LAP mods_pointer
+ADD
+SAP mods_pointer ; increment modulo
+LAM primes_left
+SUB
+STA primes_left ; decrement primes left
+LAM primes_pointer
+ADD
+STA primes_pointer ; increment primes pointer
+LAM mods_pointer
+ADD
+STA mods_pointer ; increment modulo pointer
+JMP prime_loop
+
+.check:
+LAM is_prime
+LBI 1
+CMP ; check if the number was marked prime
+JMZ prime; is prime
+JMP nextNum
+.prime:
+LAM current_number
+OTA ; show current number
+LBI 239
+ADD
+JMC nextNum; if the number exceeds 16 it won't be added to primes
+.new_prime:
+LBI 1
+LAM primes
+ADD
+STA primes ; increment primes counter
+LAI 1
+SAP mods_pointer ; set new primes modulo to 1
+LAM current_number 
+SAP primes_pointer ; set new prime to current_nubmer
+.nextNum:
+LBI 1
+LAM current_number
+ADD
+JMC end
+STA current_number ; increment current number
+JMP next_prime
+.end:
+HALT
+
+
+
+
+
+
