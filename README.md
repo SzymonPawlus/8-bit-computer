@@ -1,7 +1,29 @@
 # 8-bit Assebmly
 
 # Compiler
-**TO DO**
+
+## Requirements
+
+- Python 3
+
+## Compilation
+
+To compile the program open terminal / command prompt in folder with assembler.py
+
+Than:
+```
+python3 compiler.py (arg1) (arg2)
+```
+`(arg1)` - is a relative path to the compiling code [.txt]
+
+`(arg2)` - is a relative path to output [ ! **WITHOUT EXTENSION** ! ]
+
+## Output
+
+Compiler outputs two files at place and with name pointed by `(arg2)`:
+
+- `(arg2).bin` - binary file to use in emulator / python-interfaced programmer
+- `(arg2).bin` - text file with text to paste in Arduino direct programmer
 
 # Commands
 
