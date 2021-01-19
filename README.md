@@ -15,4 +15,5 @@ python3 main.py (arg1) (arg2)
 ```
 
 `(arg1)` - Path to the source `.bin` file
+
 `(arg2)` - Serial Port name for Arduino Mega e. `COM2` (Windows), `/dev/ttyUSB0` (Linux)
