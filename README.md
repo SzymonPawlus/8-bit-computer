@@ -5,7 +5,9 @@
 ### Usage:
 
 Pin 2 on Arduino Mega connect to yours EEPROM WEB pin
+
 Pin 23 on Arduino Mega connect to your EEPROM OEB pin
+
 Connect EEPROM CEB pin to ground 
 
 ### Adjusting To your EEPROM:
