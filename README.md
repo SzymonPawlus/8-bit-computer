@@ -11,8 +11,8 @@ python3 main.py (arg1)
 `(arg1)` - `.bin` file with code f.e. from Assembler.py
 
 In emulator:
-- if you want to execute one command only click `Tick`
-- if you want to enable clock tick `Start` checkbox and adjust speed on slider
+- if you want to execute one command only, click `Tick`
+- if you want to enable clock, tick `Start` checkbox and adjust speed on slider
 
 You can track all the variables on the screen
 
